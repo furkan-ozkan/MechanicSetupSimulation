@@ -44,8 +44,20 @@ public class Interactable : MonoBehaviour, IPlaceable, IHoverable
     {
         transform.DOMove(animPos + pos, .5f).OnComplete(() =>
         {
-            transform.DORotate(rot, .5f);
-            transform.DOMove(pos, .5f);
+            if (type.Equals(InteractableType.Rod_bolt_Left) || type.Equals(InteractableType.Rod_bold_Right))
+            {
+                transform.DORotate(rot, .5f).OnComplete(() =>
+                {
+                    transform.DORotate(new Vector3(transform.eulerAngles.x,transform.eulerAngles.y, 175), .5f);
+                    transform.DOMove(pos, .5f);
+                });
+
+            }
+            else
+            {
+                transform.DORotate(rot, .5f);
+                transform.DOMove(pos, .5f);
+            }
         });
         isPlaced = true;
         EndHover(GameManager.Instance.holder.defaultMTL);
