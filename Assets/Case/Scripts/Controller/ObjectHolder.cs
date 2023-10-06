@@ -41,25 +41,28 @@ public class ObjectHolder : MonoBehaviour
     {
         bool leftClick = Input.GetMouseButtonDown(0);
 
-        if (!gameManager.GetHoldingObject() && leftClick)
+        if (!gameManager.globalCoolDown)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 100,mask))
+            if (!gameManager.GetHoldingObject() && leftClick)
             {
-                if (hit.transform.GetComponent<Interactable>())
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, 100, mask))
                 {
-                    if (!hit.transform.GetComponent<Interactable>().isPlaced)
+                    if (hit.transform.GetComponent<Interactable>())
                     {
-                        hit.transform.GetComponent<Collider>().enabled = false;
-                        GameManager.Instance.SetHoldingObject(hit.transform.gameObject);
-                        GameManager.Instance.SetHoldingObjectInteractable(GameManager.Instance.GetHoldingObject().GetComponent<Interactable>());
-                        GameManager.Instance.EnableController();
-                        hit.transform.GetComponent<Collider>().enabled = true;
-                    }
-                    else
-                    {
-                        hit.transform.GetComponent<Interactable>().UnplaceObject();
+                        if (!hit.transform.GetComponent<Interactable>().isPlaced)
+                        {
+                            hit.transform.GetComponent<Collider>().enabled = false;
+                            GameManager.Instance.SetHoldingObject(hit.transform.gameObject);
+                            GameManager.Instance.SetHoldingObjectInteractable(GameManager.Instance.GetHoldingObject().GetComponent<Interactable>());
+                            GameManager.Instance.EnableController();
+                            hit.transform.GetComponent<Collider>().enabled = true;
+                        }
+                        else
+                        {
+                            hit.transform.GetComponent<Interactable>().UnplaceObject();
+                        }
                     }
                 }
             }

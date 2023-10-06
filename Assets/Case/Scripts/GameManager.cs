@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public ObjectHolder holder;
 
     public DataSO data;
+    public bool globalCoolDown=false;
 
     #endregion
 

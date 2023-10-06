@@ -42,6 +42,7 @@ public class Interactable : MonoBehaviour, IPlaceable, IHoverable
     // placing object to correct place
     public void PlaceObject(Vector3 pos, Vector3 rot)
     {
+        GameManager.Instance.globalCoolDown = true;
         transform.DOMove(animPos + pos, .5f).OnComplete(() =>
         {
             if (type.Equals(InteractableType.Rod_bolt_Left) || type.Equals(InteractableType.Rod_bold_Right))
@@ -49,14 +50,20 @@ public class Interactable : MonoBehaviour, IPlaceable, IHoverable
                 transform.DORotate(rot, .5f).OnComplete(() =>
                 {
                     transform.DORotate(new Vector3(transform.eulerAngles.x,transform.eulerAngles.y, 175), .5f);
-                    transform.DOMove(pos, .5f);
+                    transform.DOMove(pos, .5f).OnComplete(() =>
+                    {
+                        GameManager.Instance.globalCoolDown = false;
+                    });
                 });
 
             }
             else
             {
                 transform.DORotate(rot, .5f);
-                transform.DOMove(pos, .5f);
+                transform.DOMove(pos, .5f).OnComplete(() =>
+                {
+                    GameManager.Instance.globalCoolDown = false;
+                });
             }
         });
         isPlaced = true;
